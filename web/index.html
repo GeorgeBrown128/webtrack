@@ -62,11 +62,28 @@
 
         function moveIcon(){
             lat += 0.00014;
-            locationMarker.setGeometry(new ol.geom.Point(ol.proj.fromLonLat([lon, lat])));
+            iconFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat([locdata.long, locdata.lat])));
             setTimeout(moveIcon, 1000);
         }
 
-        moveIcon();
+        function reqListener(){
+            var locdata = JSON.parse(this.responseText);
+            iconFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat([lon, lat])));
+            console.log(this.responseText);
+            console.log(this.status);
+        }
+
+        function reReq(){
+            oReq.open("GET", "https://electronics.digital/map/location.json");
+            oReq.send();
+            setTimeout(reReq, 1000);
+        }
+  
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        reReq();
+
+//        moveIcon();
     </script>
     </body>
 </html>
